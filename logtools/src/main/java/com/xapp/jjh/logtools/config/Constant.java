@@ -11,7 +11,7 @@ import java.io.File;
  */
 public class Constant {
     public static File logDir = Environment.getExternalStorageDirectory();
-    public static String normalLogTag = "FileLog";
+    public static String normalLogTag = "";
     public static String crashLogTag = "CrashLog";
     public static LogLevel logLevel = LogLevel.FULL;
 }

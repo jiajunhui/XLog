@@ -5,6 +5,9 @@ import com.xapp.jjh.logtools.config.Constant;
 import com.xapp.jjh.logtools.config.XLogConfig;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -25,6 +28,10 @@ public class LogFileUtils {
 
 	private static String getLogFileName() {
 		return new File(getLogDir(),getNowFileName()).getAbsolutePath();
+	}
+
+	private static String getLogFileName(String fileName) {
+		return new File(getLogDir(),getNowFileName(fileName)).getAbsolutePath();
 	}
 
 	private static File getLogDir(){
@@ -50,25 +57,74 @@ public class LogFileUtils {
 		return getLogTag() + sdf.format(new Date()) + ".txt";
 	}
 
+	private static String getNowFileName(String fileName) {
+		SimpleDateFormat sdf = new SimpleDateFormat(dataPattern);
+		return getLogTag() + fileName==null?"":(fileName + "-") + sdf.format(new Date()) + ".txt";
+	}
+
 	private static String getLogTag(){
 		if(config == null)
 			return Constant.normalLogTag;
 		return config.getNormalLogTag();
 	}
+
+	public static void writeException(Throwable throwable){
+		if(throwable!=null){
+			writeFile(getLogFileName("Exception"),getExceptionHandledLog(getExceptionContent(throwable)),true);
+		}
+	}
+
+	public static void writeException(String fileName, Throwable throwable){
+		if(throwable!=null){
+			writeFile(getLogFileName(fileName),getExceptionHandledLog(getExceptionContent(throwable)),true);
+		}
+	}
+
+	private static String getExceptionContent(Throwable throwable){
+		if(throwable!=null){
+			Writer writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter(writer);
+			throwable.printStackTrace(printWriter);
+			Throwable cause = throwable.getCause();
+			while (cause != null) {
+				cause.printStackTrace(printWriter);
+				cause = cause.getCause();
+			}
+			printWriter.close();
+			return writer.toString();
+		}
+		return null;
+	}
 	
 	public static void writeLog(String log){
 		if(!allowW)
 			return;
-		appendMethodB(getLogFileName(), getHandledLog(log));
+		writeFile(getLogFileName(), getHandledLog(log),true);
+	}
+
+	public static void writeLog(String fileName, String log){
+		if(!allowW)
+			return;
+		writeFile(getLogFileName(fileName), getHandledLog(log),true);
+	}
+
+	public static void writeOverWriteLog(String fileName, String log){
+		if(!allowW)
+			return;
+		writeFile(getLogFileName(fileName), getHandledLog(log),false);
 	}
 	
 	private static String getHandledLog(String log){
-		return getNowTime() + "\t" + log + "\n";
+		return "[--" + getNowTime() + "--]" + "\t" + log + "\n\n";
 	}
 
-	private synchronized static void appendMethodB(String fileName, String content) {
+	private static String getExceptionHandledLog(String log){
+		return "[--" + getNowTime() + "--]" + "\n" + log + "\n\n";
+	}
+
+	private synchronized static void writeFile(String fileName, String content, boolean append) {
 		try {
-			FileWriter writer = new FileWriter(fileName, true);
+			FileWriter writer = new FileWriter(fileName, append);
 			writer.write(content);
 			writer.close();
 		} catch (Exception e) {

@@ -3,6 +3,7 @@ package com.xapp.jjh.logtools.tools;
 import android.content.Context;
 import com.xapp.jjh.logtools.config.XLogConfig;
 import com.xapp.jjh.logtools.crash.CrashHandler;
+import com.xapp.jjh.logtools.filelog.FileLogManager;
 import com.xapp.jjh.logtools.filelog.LogFileUtils;
 import com.xapp.jjh.logtools.logger.AndroidLogTool;
 import com.xapp.jjh.logtools.logger.LogLevel;
@@ -32,6 +33,7 @@ public class XLog {
         if(config.isSaveCrashLog()){
             CrashHandler.getInstance().init(context,config);
         }
+        FileLogManager.init(config);
         initDefaultSetting(config.getLogLevel());
         LogFileUtils.init(config);
     }
@@ -102,8 +104,47 @@ public class XLog {
         Logger.xml(xml);
     }
 
+    /**
+     * file log , write file to local storage
+     * @param message
+     */
     public static void fileLog(String message){
         LogFileUtils.writeLog(message);
+    }
+
+    /**
+     * file log , write file to local storage
+     * @param fileName you can set log file name.
+     * @param message
+     */
+    public static void fileLog(String fileName, String message){
+        LogFileUtils.writeLog(fileName,message);
+    }
+
+    /**
+     * file log , overwrite content ,write file to local storage
+     * @param fileName you can set log file name.
+     * @param message
+     */
+    public static void fileOverWriteLog(String fileName, String message){
+        LogFileUtils.writeOverWriteLog(fileName,message);
+    }
+
+    /**
+     * exception file log , write file to local storage
+     * @param throwable
+     */
+    public static void fileLogException(Throwable throwable){
+        LogFileUtils.writeException(throwable);
+    }
+
+    /**
+     * exception file log , write file to local storage
+     * @param fileName you can set log file name.
+     * @param throwable
+     */
+    public static void fileLogException(String fileName, Throwable throwable){
+        LogFileUtils.writeException(fileName,throwable);
     }
 
 }
