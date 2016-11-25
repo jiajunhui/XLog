@@ -23,7 +23,10 @@ public class LogFileUtils {
 	private static XLogConfig config;
 
 	public static void init(XLogConfig config){
-		LogFileUtils.config = config;
+		if(config!=null){
+			LogFileUtils.config = config;
+			allowW = config.isFileLogAllow();
+		}
 	}
 
 	private static String getLogFileName() {
@@ -32,6 +35,10 @@ public class LogFileUtils {
 
 	private static String getLogFileName(String fileName) {
 		return new File(getLogDir(),getNowFileName(fileName)).getAbsolutePath();
+	}
+
+	private static String getLogFileNameUnFormatDate(String fileName) {
+		return new File(getLogDir(),fileName + ".txt").getAbsolutePath();
 	}
 
 	private static File getLogDir(){
@@ -111,7 +118,7 @@ public class LogFileUtils {
 	public static void writeOverWriteLog(String fileName, String log){
 		if(!allowW)
 			return;
-		writeFile(getLogFileName(fileName), getHandledLog(log),false);
+		writeFile(getLogFileNameUnFormatDate(fileName), getHandledLog(log),false);
 	}
 	
 	private static String getHandledLog(String log){

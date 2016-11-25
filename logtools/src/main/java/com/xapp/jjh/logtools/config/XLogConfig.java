@@ -14,6 +14,7 @@ public class XLogConfig {
     private LogLevel logLevel = Constant.logLevel;
     private boolean saveCrashLog = true;
     private boolean messageTable = true;
+    private boolean fileLogAllow = false;
 
     public File getLogDir() {
         return logDir;
@@ -74,6 +75,15 @@ public class XLogConfig {
 
     public XLogConfig setMessageTable(boolean messageTable) {
         this.messageTable = messageTable;
+        return this;
+    }
+
+    public boolean isFileLogAllow() {
+        return fileLogAllow;
+    }
+
+    public XLogConfig setFileLogAllow(boolean fileLogAllow) {
+        this.fileLogAllow = fileLogAllow;
         return this;
     }
 }
