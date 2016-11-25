@@ -12,6 +12,8 @@ public class XLogConfig {
     private String normalLogTag = Constant.normalLogTag;
     private String crashLogTag = Constant.crashLogTag;
     private LogLevel logLevel = Constant.logLevel;
+    public static final String DEFAULT_FILE_EXTENSION_NAME = ".txt";
+    private String fileExtensionName = DEFAULT_FILE_EXTENSION_NAME;
     private boolean saveCrashLog = true;
     private boolean messageTable = true;
     private boolean fileLogAllow = false;
@@ -84,6 +86,18 @@ public class XLogConfig {
 
     public XLogConfig setFileLogAllow(boolean fileLogAllow) {
         this.fileLogAllow = fileLogAllow;
+        return this;
+    }
+
+    public String getFileExtensionName() {
+        if(TextUtils.isEmpty(fileExtensionName)){
+            return DEFAULT_FILE_EXTENSION_NAME;
+        }
+        return fileExtensionName;
+    }
+
+    public XLogConfig setFileExtensionName(String fileExtensionName) {
+        this.fileExtensionName = fileExtensionName;
         return this;
     }
 }

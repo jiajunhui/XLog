@@ -29,6 +29,13 @@ public class LogFileUtils {
 		}
 	}
 
+	private static String getFileExtensionName(){
+		if(config==null){
+			return XLogConfig.DEFAULT_FILE_EXTENSION_NAME;
+		}
+		return config.getFileExtensionName();
+	}
+
 	private static String getLogFileName() {
 		return new File(getLogDir(),getNowFileName()).getAbsolutePath();
 	}
@@ -38,7 +45,7 @@ public class LogFileUtils {
 	}
 
 	private static String getLogFileNameUnFormatDate(String fileName) {
-		return new File(getLogDir(),fileName + ".txt").getAbsolutePath();
+		return new File(getLogDir(),fileName + getFileExtensionName()).getAbsolutePath();
 	}
 
 	private static File getLogDir(){
@@ -61,12 +68,12 @@ public class LogFileUtils {
 
 	private static String getNowFileName() {
 		SimpleDateFormat sdf = new SimpleDateFormat(dataPattern);
-		return getLogTag() + sdf.format(new Date()) + ".txt";
+		return getLogTag() + sdf.format(new Date()) + getFileExtensionName();
 	}
 
 	private static String getNowFileName(String fileName) {
 		SimpleDateFormat sdf = new SimpleDateFormat(dataPattern);
-		return getLogTag() + fileName==null?"":(fileName + "-") + sdf.format(new Date()) + ".txt";
+		return getLogTag() + fileName==null?"":(fileName + "-") + sdf.format(new Date()) + getFileExtensionName();
 	}
 
 	private static String getLogTag(){

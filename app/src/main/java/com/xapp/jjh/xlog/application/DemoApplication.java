@@ -20,6 +20,7 @@ public class DemoApplication extends Application {
                 new XLogConfig()
                         .setLogLevel(LogLevel.FULL)
                         .setLogDir(new File(Environment.getExternalStorageDirectory(),"TestXLog"))
+                        .setFileExtensionName(".txt")
                         .setSaveCrashLog(true)
                         .setFileLogAllow(true)
                         .setMessageTable(true));
