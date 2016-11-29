@@ -36,6 +36,7 @@ public class XLog {
         FileLogManager.init(config);
         initDefaultSetting(config.getLogLevel());
         LogFileUtils.init(config);
+        LogUtil.init(config);
     }
 
     public static void d(String message, Object... args) {
@@ -84,6 +85,13 @@ public class XLog {
         }else{
             LogUtil.w(message, args);
         }
+    }
+
+    /**
+     * print method caller stack
+     */
+    public static void printMethodCallStatck(){
+        MethodStack.printMethodCallStack();
     }
 
     /**

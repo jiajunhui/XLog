@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         XLog.d("onResume");
+        XLog.printMethodCallStatck();
     }
 
     @Override

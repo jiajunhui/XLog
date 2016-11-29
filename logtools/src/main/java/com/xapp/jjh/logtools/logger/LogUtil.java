@@ -18,6 +18,8 @@ package com.xapp.jjh.logtools.logger;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.xapp.jjh.logtools.config.XLogConfig;
+
 /**
  * Log工具，类似android.util.Log。
  * tag自动产生，格式: customTagPrefix:className.methodName(L:lineNumber),
@@ -27,6 +29,12 @@ public class LogUtil {
     public static boolean allowLog = true;
     public static String customTagPrefix = "";
     private LogUtil() {
+    }
+
+    public static void init(XLogConfig config){
+        if(config!=null){
+            allowLog = config.getLogLevel()==LogLevel.FULL;
+        }
     }
 
     private static String generateTag() {
