@@ -21,6 +21,7 @@ public class DemoApplication extends Application {
                         .setLogLevel(LogLevel.FULL)
                         .setLogDir(new File(Environment.getExternalStorageDirectory(),"TestXLog"))
                         .setFileExtensionName(".txt")
+                        .setFileClearCycle(60*1000)
                         .setSaveCrashLog(true)
                         .setFileLogAllow(true)
                         .setMessageTable(true));

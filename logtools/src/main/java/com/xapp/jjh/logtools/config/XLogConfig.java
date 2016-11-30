@@ -14,6 +14,8 @@ public class XLogConfig {
     private LogLevel logLevel = Constant.logLevel;
     public static final String DEFAULT_FILE_EXTENSION_NAME = ".txt";
     private String fileExtensionName = DEFAULT_FILE_EXTENSION_NAME;
+    public static final long DEFAULT_FILE_CLEAR_CYCLE = 7*24*60*60*1000;//a week
+    private long mFileClearCycle = DEFAULT_FILE_CLEAR_CYCLE;
     private boolean saveCrashLog = true;
     private boolean messageTable = true;
     private boolean fileLogAllow = false;
@@ -98,6 +100,18 @@ public class XLogConfig {
 
     public XLogConfig setFileExtensionName(String fileExtensionName) {
         this.fileExtensionName = fileExtensionName;
+        return this;
+    }
+
+    public long getFileClearCycle() {
+        if(mFileClearCycle<=0){
+            mFileClearCycle = DEFAULT_FILE_CLEAR_CYCLE;
+        }
+        return mFileClearCycle;
+    }
+
+    public XLogConfig setFileClearCycle(long fileClearCycle) {
+        this.mFileClearCycle = fileClearCycle;
         return this;
     }
 }

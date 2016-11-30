@@ -8,8 +8,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 import com.xapp.jjh.logtools.config.XLogConfig;
+import com.xapp.jjh.logtools.filelog.FileUtils;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -28,7 +28,6 @@ import java.util.Map;
 public class CrashHandler implements UncaughtExceptionHandler {
 	
 	public static final String TAG = "CrashHandler";
-	
 	//系统默认的UncaughtException处理类 
 	private UncaughtExceptionHandler mDefaultHandler;
 	//CrashHandler实例
@@ -37,10 +36,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
 	private Context mContext;
 	//用来存储设备信息和异常信息
 	private Map<String, String> infos = new HashMap<>();
-
 	//用于格式化日期,作为日志文件名的一部分
 	private DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-
 	private XLogConfig config;
 
 	private CrashHandler() {
@@ -138,7 +135,6 @@ public class CrashHandler implements UncaughtExceptionHandler {
 	 * @return	返回文件名称,便于将文件传送到服务器
 	 */
 	private String saveCrashInfo2File(Throwable ex) {
-		
 		StringBuffer sb = new StringBuffer();
 		for (Map.Entry<String, String> entry : infos.entrySet()) {
 			String key = entry.getKey();
@@ -157,23 +153,19 @@ public class CrashHandler implements UncaughtExceptionHandler {
 		printWriter.close();
 		String result = writer.toString();
 		sb.append(result);
-		try {
-			String time = formatter.format(new Date());
-			String fileName = config.getCrashLogTag() + time + ".txt";
-			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-				String path = config.getLogDir().getAbsolutePath();
-				File dir = new File(path);
-				if (!dir.exists()) {
-					dir.mkdirs();
-				}
-				FileOutputStream fos = new FileOutputStream(path + "/" + fileName);
-				fos.write(sb.toString().getBytes());
-				fos.close();
+		//add file time header
+		String time = formatter.format(new Date());
+		String fileName = config.getCrashLogTag() + time + ".txt";
+		//save log to file
+		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+			String path = config.getLogDir().getAbsolutePath();
+			File dir = new File(path);
+			if (!dir.exists()) {
+				dir.mkdirs();
 			}
-			return fileName;
-		} catch (Exception e) {
-			Log.e(TAG, "an error occured while writing file...", e);
+			String filePathName = path + "/" + fileName;
+			FileUtils.writeToFile(filePathName,sb.toString(),false);
 		}
-		return null;
+		return fileName;
 	}
 }

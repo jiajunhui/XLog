@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         String json = GsonTools.createGsonString(product);
         XLog.json(json);
         XLog.fileLog(json);
-        XLog.fileLog("TEST_CUS_FILE_NAME",json);
+        XLog.fileLog("TEST_CUS_FILE_NAME" + System.currentTimeMillis(),json);
         try{
             int i = 9/0;
         }catch (Exception e){

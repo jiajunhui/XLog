@@ -4,10 +4,6 @@ import android.annotation.SuppressLint;
 import com.xapp.jjh.logtools.config.Constant;
 import com.xapp.jjh.logtools.config.XLogConfig;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -84,30 +80,14 @@ public class LogFileUtils {
 
 	public static void writeException(Throwable throwable){
 		if(throwable!=null){
-			writeFile(getLogFileName("Exception"),getExceptionHandledLog(getExceptionContent(throwable)),true);
+			writeFile(getLogFileName("Exception"),getExceptionHandledLog(FileUtils.getExceptionContent(throwable)),true);
 		}
 	}
 
 	public static void writeException(String fileName, Throwable throwable){
 		if(throwable!=null){
-			writeFile(getLogFileName(fileName),getExceptionHandledLog(getExceptionContent(throwable)),true);
+			writeFile(getLogFileName(fileName),getExceptionHandledLog(FileUtils.getExceptionContent(throwable)),true);
 		}
-	}
-
-	private static String getExceptionContent(Throwable throwable){
-		if(throwable!=null){
-			Writer writer = new StringWriter();
-			PrintWriter printWriter = new PrintWriter(writer);
-			throwable.printStackTrace(printWriter);
-			Throwable cause = throwable.getCause();
-			while (cause != null) {
-				cause.printStackTrace(printWriter);
-				cause = cause.getCause();
-			}
-			printWriter.close();
-			return writer.toString();
-		}
-		return null;
 	}
 	
 	public static void writeLog(String log){
@@ -136,14 +116,8 @@ public class LogFileUtils {
 		return "[--" + getNowTime() + "--]" + "\n" + log + "\n\n";
 	}
 
-	private synchronized static void writeFile(String fileName, String content, boolean append) {
-		try {
-			FileWriter writer = new FileWriter(fileName, append);
-			writer.write(content);
-			writer.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	private static void writeFile(String fileName, String content, boolean append) {
+		FileUtils.writeToFile(fileName,content,append);
 	}
 
 }
